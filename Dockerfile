@@ -26,21 +26,19 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update && \
     apt-get install -yq curl apt-transport-https unzip gnupg2 && \
     # Get official Microsoft repository configuration
-    curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
-    curl https://packages.microsoft.com/config/ubuntu/$UBUNTUVERSION/mssql-server-$MSSQLVERSION.list | tee /etc/apt/sources.list.d/mssql-server.list && \
-    curl https://packages.microsoft.com/config/ubuntu/$UBUNTUVERSION/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
+    curl -s https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
+    curl -s https://packages.microsoft.com/config/ubuntu/$UBUNTUVERSION/mssql-server-$MSSQLVERSION.list | tee /etc/apt/sources.list.d/mssql-server.list && \
+    curl -s https://packages.microsoft.com/config/ubuntu/$UBUNTUVERSION/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
     apt-get update && \
-    # Install SQL Server from apt
-    apt-get install -y mssql-server && \
-    # Install optional packages
-    apt-get install -y mssql-server-fts && \
+    # Install SQL Server + FTS from apt
+    apt-get install -y mssql-server mssql-server-fts && \
     ACCEPT_EULA=Y apt-get install -y mssql-tools locales && \
     curl -ksSL -o /tmp/wait-for-port.zip https://github.com/bitnami/wait-for-port/releases/download/v1.0/wait-for-port.zip && \
     unzip /tmp/wait-for-port.zip -d /usr/local/bin/ && rm -f /tmp/wait-for-port.zip &&  chmod a+x /usr/local/bin/wait-for-port && \
     echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc && /bin/bash -c "source ~/.bashrc" && \
     locale-gen en_US.UTF-8 && update-locale LANG=en_US.UTF-8 && \
     # remove curl and others
-    apt-get purge -y curl apt-transport-https unzip && \
+    apt-get purge -y curl apt-transport-https unzip gnupg2 && \
     # Cleanup the Dockerfile
     apt-get clean && rm -rf /var/lib/apt/lists && \
     # Create app directory
@@ -61,4 +59,4 @@ RUN chmod +x /usr/src/icmdb/*.sh
 
 WORKDIR /usr/src/icmdb
 
-CMD ./entrypoint.sh
+CMD ["./entrypoint.sh"]
