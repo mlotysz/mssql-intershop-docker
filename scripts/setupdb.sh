@@ -1,8 +1,8 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 #wait for the SQL Server to come up
 wait-for-port --host=localhost --timeout=300 1433
-sleep 30s
+sleep 5s
 
 if [ -z ${RECREATEDB+x} ]; then
     echo "Database is used from volume."

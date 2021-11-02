@@ -1,0 +1,36 @@
+---
+version: "3.4"
+
+services:
+
+  mssql-server:
+    build:
+      context: ./
+      args:
+        UBUNTUVERSION: "16.04"
+        MSSQLVERSION: "2017"
+    container_name: mssql-server
+    ports:
+      - "1433:1433"
+    volumes:
+      - type: volume
+        source: mssqlserver
+        target: /var/opt/mssql
+        volume:
+          nocopy: true
+      - type: bind
+        source: ./backup
+        target: /var/opt/mssql/backup
+        read_only: true
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "1nstershop5A"
+      MSSQL_PID: "Developer"
+      RECREATEDB: "false"
+      RECREATEUSER: "false"
+      RESTOREDB: ${RESTOREDB:-false}
+      BACKUP: "'/var/opt/mssql/backup/intershop.db.backup'"
+      BACKUP_DB_NAME: 'intershop_data'
+
+volumes:
+  mssqlserver:

@@ -10,6 +10,8 @@
 # editor backup files
 **~
 
-
 # viual code
 .vscode/**/*
+
+# no DB dump
+backup/*
