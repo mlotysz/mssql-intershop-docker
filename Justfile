@@ -2,7 +2,7 @@
 # Used Linux tools: docker and docker-compose
 
 @default:
-	just --list
+	just --choose
 
 # create DB image
 build:
@@ -11,9 +11,13 @@ build:
 run-db-only:
 	docker-compose up
 
-# run DB and SOLR
+# run DB, SOLR and Mailhog
 run:
-	docker-compose -f docker-compose.yaml -f docker-compose-solr.yaml up --remove-orphans
+	docker-compose \
+		-f docker-compose.yaml \
+		-f docker-compose-solr.yaml \
+		-f docker-compose-mail.yaml \
+		up --remove-orphans
 
 # cleanup dangling containers and remove volumes (all)
 reset:

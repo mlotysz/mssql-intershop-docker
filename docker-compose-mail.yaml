@@ -1,0 +1,15 @@
+---
+version: "3.4"
+
+services:
+  # https://github.com/mailhog/MailHog/blob/master/docs/CONFIG.md
+  mail:
+    image: mailhog/mailhog
+    container_name: mail
+    logging:
+      driver: 'none'  # disable logs saving
+    ports:
+      - "8025:8025"  # web UI for humans
+      - "1125:1125"  # expose SMTP for Intershop
+    environment:
+      - MH_SMTP_BIND_ADDR=0.0.0.0:1125
