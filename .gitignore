@@ -1,17 +1,2 @@
-*.bak
-*.log
-
-# Eclipse project files
-**/bin/
-**/.settings/
-**/.classpath
-**/.project
-
-# editor backup files
-**~
-
-# viual code
-.vscode/**/*
-
-# no DB dump
-backup/*
+/backup
+/intershop.db.backup.txz

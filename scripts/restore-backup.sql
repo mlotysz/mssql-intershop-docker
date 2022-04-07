@@ -30,12 +30,3 @@ GO
 
 USE $(ICM_DB_NAME);
 EXEC sp_changedbowner 'intershop';
--- set admin password to !InterShop00!
-UPDATE basiccredentials
-SET password             = '7d50a66fe6ee08ffc9c479165c953bfcb38c9527748f2f88145cce01f776c3852060d59826b073f2'
-, oca                  = oca + 1
-, PASSWORDCREATIONDATE = DATEADD(YEAR, 10, GETDATE())
-, FAILURECOUNT         = NULL
-, REMINDEREMAIL        = 'maciej.lotysz@piercegroup.com'
-WHERE login = 'admin';
-GO
