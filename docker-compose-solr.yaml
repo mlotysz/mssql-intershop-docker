@@ -48,7 +48,6 @@ services:
   zoo-1:
     image: zookeeper:3.6
     container_name: zoo-1
-    restart: always
     hostname: zoo-1
     volumes:
       - zoo1data:/data
@@ -61,7 +60,6 @@ services:
   zoo-2:
     image: zookeeper:3.6
     container_name: zoo-2
-    restart: always
     hostname: zoo-2
     volumes:
       - zoo2data:/data
@@ -74,7 +72,6 @@ services:
   zoo-3:
     image: zookeeper:3.6
     container_name: zoo-3
-    restart: always
     hostname: zoo-3
     volumes:
       - zoo3data:/data
