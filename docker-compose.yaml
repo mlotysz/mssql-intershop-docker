@@ -7,8 +7,8 @@ services:
     build:
       context: ./
       args:
-        UBUNTUVERSION: "16.04"
-        MSSQLVERSION: "2017"
+        UBUNTUVERSION: "18.04"
+        MSSQLVERSION: "2019"
     container_name: mssql-server
     ports:
       - "1433:1433"
