@@ -25,8 +25,11 @@ END;
 GO
 
 USE [master];
+ALTER DATABASE $(ICM_DB_NAME) SET SINGLE_USER;
 EXEC #restoreIcmDB @DBName = $(ICM_DB_NAME), @BackupFile = $(BACKUP), @BackupDBName = $(BACKUP_DB_NAME)
+ALTER DATABASE $(ICM_DB_NAME) SET MULTI_USER;
 GO
 
 USE $(ICM_DB_NAME);
 EXEC sp_changedbowner 'intershop';
+GO
