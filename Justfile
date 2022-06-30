@@ -25,7 +25,10 @@ run:
 # cleanup dangling containers and remove volumes (all)
 reset:
 	docker container prune
-	docker-compose down -v
+	docker-compose -f docker-compose.yaml \
+		-f docker-compose-solr.yaml \
+		-f docker-compose-mail.yaml \
+		down -v
 
 # start DB only and restore from backup
 _restore:

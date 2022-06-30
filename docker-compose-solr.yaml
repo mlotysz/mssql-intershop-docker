@@ -4,87 +4,116 @@ version: "3.4"
 services:
 
   solr-1:
-    image: solr:8.2-slim
+    image: solr:8-slim
     container_name: solr-1
+    command:
+      - "solr-foreground"
+      - "-m"
+      - "512m"
+      - "-Dsolr.disableConfigSetsCreateAuthChecks=true"
+      - "-a"
+      - "-XX:-UseLargePages"
+      - "-q"
     ports:
       - "8981:8983"
     volumes:
       - solr1:/var/solr
     environment:
-      - ZK_HOST=zoo-1:2181,zoo-2:2181,zoo-3:2181
+      ZK_HOST: zoo-1:2181,zoo-2:2181,zoo-3:2181
+      SOLR_JAVA_MEM: -Dsolr.disableConfigSetsCreateAuthChecks=true
     depends_on:
       - zoo-1
       - zoo-2
       - zoo-3
 
   solr-2:
-    image: solr:8.2-slim
+    image: solr:8-slim
     container_name: solr-2
+    command:
+      - "solr-foreground"
+      - "-m"
+      - "512m"
+      - "-Dsolr.disableConfigSetsCreateAuthChecks=true"
+      - "-a"
+      - "-XX:-UseLargePages"
+      - "-q"
     ports:
       - "8982:8983"
     volumes:
       - solr2:/var/solr
     environment:
-      - ZK_HOST=zoo-1:2181,zoo-2:2181,zoo-3:2181
+      ZK_HOST: zoo-1:2181,zoo-2:2181,zoo-3:2181
     depends_on:
       - zoo-1
       - zoo-2
       - zoo-3
 
   solr-3:
-    image: solr:8.2-slim
+    image: solr:8-slim
     container_name: solr-3
+    command:
+      - "solr-foreground"
+      - "-m"
+      - "512m"
+      - "-Dsolr.disableConfigSetsCreateAuthChecks=true"
+      - "-a"
+      - "-XX:-UseLargePages"
+      - "-q"
     ports:
       - "8983:8983"
     volumes:
       - solr3:/var/solr
     environment:
-      - ZK_HOST=zoo-1:2181,zoo-2:2181,zoo-3:2181
+      ZK_HOST: zoo-1:2181,zoo-2:2181,zoo-3:2181
+      EXTRA_ARGS: -Dsolr.disableConfigSetsCreateAuthChecks=true
     depends_on:
       - zoo-1
       - zoo-2
       - zoo-3
 
   zoo-1:
-    image: zookeeper:3.6
+    image: docker.io/bitnami/zookeeper:3.8
     container_name: zoo-1
-    hostname: zoo-1
-    volumes:
-      - zoo1data:/data
     ports:
-      - 2181:2181
+      - '2181'
+    volumes:
+      - zookeeper_data:/bitnami
     environment:
-      ZOO_MY_ID: 1
-      ZOO_SERVERS: "server.1=0.0.0.0:2888:3888;2181 server.2=zoo-2:2888:3888;2181 server.3=zoo-3:2888:3888;2181"
+      - ZOO_SERVER_ID=1
+      - ALLOW_ANONYMOUS_LOGIN=yes
+      - ZOO_SERVERS=zoo-1:2888:3888,zoo-2:2888:3888,zoo-3:2888:3888
+      - ZOO_4LW_COMMANDS_WHITELIST=mntr,conf,ruok
 
   zoo-2:
-    image: zookeeper:3.6
+    image: docker.io/bitnami/zookeeper:3.8
     container_name: zoo-2
-    hostname: zoo-2
-    volumes:
-      - zoo2data:/data
     ports:
-      - 2182:2181
+      - '2182:2181'
+    volumes:
+      - zookeeper2_data:/bitnami
     environment:
-      ZOO_MY_ID: 2
-      ZOO_SERVERS: "server.1=zoo-1:2888:3888;2181 server.2=0.0.0.0:2888:3888;2181 server.3=zoo-3:2888:3888;2181"
+      - ZOO_SERVER_ID=2
+      - ALLOW_ANONYMOUS_LOGIN=yes
+      - ZOO_SERVERS=zoo-1:2888:3888,zoo-2:2888:3888,zoo-3:2888:3888
+      - ZOO_4LW_COMMANDS_WHITELIST=mntr,conf,ruok
 
   zoo-3:
-    image: zookeeper:3.6
+    image: docker.io/bitnami/zookeeper:3.8
     container_name: zoo-3
-    hostname: zoo-3
-    volumes:
-      - zoo3data:/data
     ports:
-      - 2183:2181
+      - '2183:2181'
+    volumes:
+      - zookeeper3_data:/bitnami
     environment:
-      ZOO_MY_ID: 3
-      ZOO_SERVERS: "server.1=zoo-1:2888:3888;2181 server.2=zoo-2:2888:3888;2181 server.3=0.0.0.0:2888:3888;2181"
+      - ZOO_SERVER_ID=3
+      - ALLOW_ANONYMOUS_LOGIN=yes
+      - ZOO_SERVERS=zoo-1:2888:3888,zoo-2:2888:3888,zoo-3:2888:3888
+      - ZOO_4LW_COMMANDS_WHITELIST=mntr,conf,ruok
 
 volumes:
-  zoo1data:
-  zoo2data:
-  zoo3data:
+  zookeeper_data:
+  zookeeper2_data:
+  zookeeper3_data:
   solr1:
   solr2:
   solr3:
